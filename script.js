@@ -1,3 +1,6 @@
+$(document).ready(function(){
+	$('#addcomment').click(processForm)
+})
 
 function processForm() {
 	let $new = $("<li><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p></li>");
