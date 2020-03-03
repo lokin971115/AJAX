@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	$('#addcomment').click(processForm)
+	$("a").click(replyclick)
 })
 
 function processForm() {
@@ -21,4 +22,8 @@ function processForm() {
 	});
 	$("#comments").append($new);
 	$("form")[0].reset();
+}
+
+function replyclick(){
+	$(this).parent("div").append("<p>123</p>")
 }
