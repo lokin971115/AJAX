@@ -55,8 +55,13 @@ function processForm() {
 }
 
 function replyclick(){
-	var $htmlelement=$("#firstform").clone();
-	$htmlelement.attr("id","secondform");
-	$htmlelement.find("button").attr("id","secondbutton");
-	$(this).parent("div").append($htmlelement);
+	if($(this).parent("div").children("form").length){
+
+	}
+	else{
+		var $htmlelement=$("#firstform").clone();
+		$htmlelement.attr("id","secondform");
+		$htmlelement.find("button").attr("id","secondbutton");
+		$(this).parent("div").append($htmlelement);
+	}
 }
