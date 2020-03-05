@@ -1,16 +1,28 @@
 $(document).ready(function(){
-	$('#firstbutton').on('click',processForm);
+	$.ajax({
+		url: "file.txt",
+		type: "GET"
+		})
+		.done(function(txt) {
+		$('body').html(txt);
+		});	
+	$('body').on('click',"#firstbutton",processForm);
 	$('body').on('click',"#secondbutton",processForm2);
 	$('body').on('click','a',replyclick);
 })
 
 function processForm2(){
-	let $new = $("<li><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a></li>");
+	$new=""
+	if($(this).parent("form").parent("div").children("ul").length){
+		$new = $("<li class=\"media\"><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a></li>");
+	}
+	else{
+		$new = $("<ul class=\"list-unstyled\"><li class=\"media\"><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a><br><br></li></ul>");
+	}
 	var h5 = $(this).parent("form").find("#inputsubject").val();
 	var h6 = $(this).parent("form").find("#inputname").val();
 	var p = $(this).parent("form").find("#inputcomment").val();
 	var color = $(this).parent("form").find("input[name=inputcolor]:checked").val();
-	$new.addClass("media");
 	$new.find("div").addClass("media-body");
 	$new.find("h5").html(h5);
 	$new.find("h6").html(h6);
@@ -25,8 +37,20 @@ function processForm2(){
 		"r": 40,
 		"fill": color
 	});
-	$(this).parent("form").parent("div").append($new);
+	if($(this).parent("form").parent("div").children("ul").length){
+		$(this).parent("form").parent("div").children("ul").append($new);
+	}
+	else{
+		$(this).parent("form").parent("div").append($new);
+	}
 	$(this).parent("form").remove();
+	var h = $('body').html();
+	console.log(h)
+	$.ajax({
+		url: "file.txt",
+		type: "PUT",
+		data:h
+		})
 }
 
 function processForm() {
@@ -52,6 +76,13 @@ function processForm() {
 	});
 	$("#comments").append($new);
 	$("#firstform")[0].reset();
+	var h = $('body').html();
+	console.log(h)
+	$.ajax({
+		url: "file.txt",
+		type: "PUT",
+		data:h
+		})
 }
 
 function replyclick(){
@@ -65,3 +96,5 @@ function replyclick(){
 		$(this).parent("div").append($htmlelement);
 	}
 }
+
+
