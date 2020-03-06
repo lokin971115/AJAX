@@ -1,4 +1,9 @@
+var iplocdata=""
+
 $(document).ready(function(){
+	$.getJSON('http://ip-api.com/json?callback=?', function(data) {
+	iplocdata=data
+	});
 	$.ajax({
 		url: "file.txt",
 		type: "GET"
@@ -11,13 +16,40 @@ $(document).ready(function(){
 	$('body').on('click','a',replyclick);
 })
 
+
+
 function processForm2(){
+	var browser =""
+	if (navigator.userAgent.search("MSIE") >= 0) {
+		browser = "Browser: MSIE "
+	}
+	else if (navigator.userAgent.search("Chrome") >= 0) {
+		browser = "Browser: Chrome "
+	}
+	else if (navigator.userAgent.search("Firefox") >= 0) {
+		browser = "Browser: Firefox "
+	}
+	else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+		browser = "Browser: Safari "
+	}
+	else if (navigator.userAgent.search("Opera") >= 0) {
+		browser = "Browser: Opera "
+	}
+	else if (navigator.userAgent.search("WebKit") >= 0) {
+		browser = "Browser: WebKit "
+	}
+	else{browser = "Browser: Unknown "}
+	var day = new Date();
+	var iploc="My ip: "+iplocdata.query+" My location: "+iplocdata.country
+	var isp="My ISP: "+iplocdata.isp
+	wirte = browser+iploc+"<br>Time: "+day+"<br>"+isp
+
 	$new=""
 	if($(this).parent("form").parent("div").children("ul").length){
-		$new = $("<li class=\"media\"><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a></li>");
+		$new = $("<li class=\"media\"><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a><p></p></li>");
 	}
 	else{
-		$new = $("<ul class=\"list-unstyled\"><li class=\"media\"><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a><br><br></li></ul>");
+		$new = $("<ul class=\"list-unstyled\"><li class=\"media\"><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a><p></p></li></ul>");
 	}
 	var h5 = $(this).parent("form").find("#inputsubject").val();
 	var h6 = $(this).parent("form").find("#inputname").val();
@@ -26,7 +58,8 @@ function processForm2(){
 	$new.find("div").addClass("media-body");
 	$new.find("h5").html(h5);
 	$new.find("h6").html(h6);
-	$new.find("p").html(p);
+	$new.find("p").eq(0).html(p)
+	$new.find("p").eq(1).html(wirte)
 	$new.find("svg").attr({
 		"height": 100,
 		"width": 100
@@ -45,7 +78,6 @@ function processForm2(){
 	}
 	$(this).parent("form").remove();
 	var h = $('body').html();
-	console.log(h)
 	$.ajax({
 		url: "file.txt",
 		type: "PUT",
@@ -53,17 +85,43 @@ function processForm2(){
 		})
 }
 
-function processForm() {
+function processForm(value) {
+	var browser =""
+	if (navigator.userAgent.search("MSIE") >= 0) {
+		browser = "Browser: MSIE "
+	}
+	else if (navigator.userAgent.search("Chrome") >= 0) {
+		browser = "Browser: Chrome "
+	}
+	else if (navigator.userAgent.search("Firefox") >= 0) {
+		browser = "Browser: Firefox "
+	}
+	else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+		browser = "Browser: Safari "
+	}
+	else if (navigator.userAgent.search("Opera") >= 0) {
+		browser = "Browser: Opera "
+	}
+	else if (navigator.userAgent.search("WebKit") >= 0) {
+		browser = "Browser: WebKit "
+	}
+	else{browser = "Browser: Unknown "}
+	var day = new Date();
+	var iploc="My ip: "+iplocdata.query+" My location: "+iplocdata.country
+	var isp="My ISP: "+iplocdata.isp
+	wirte = browser+iploc+"<br>Time: "+day+"<br>"+isp
+
 	var h5 = $("#firstform").find("#inputsubject").val();
 	var h6 = $("#firstform").find("#inputname").val();
 	var p = $("#firstform").find("#inputcomment").val();
 	var color = $("#firstform").find("input[name=inputcolor]:checked").val();
-	let $new = $("<li><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a></li>");
+	let $new = $("<li><svg><circle></circle></svg><div><h5></h5><h6></h6><p></p><a href=\"#\" role=\"button\">Reply</a><p></p></li>");
 	$new.addClass("media");
 	$new.find("div").addClass("media-body");
 	$new.find("h5").html(h5);
 	$new.find("h6").html(h6);
-	$new.find("p").html(p);
+	$new.find("p").eq(0).html(p)
+	$new.find("p").eq(1).html(wirte)
 	$new.find("svg").attr({
 		"height": 100,
 		"width": 100
@@ -77,7 +135,6 @@ function processForm() {
 	$("#comments").append($new);
 	$("#firstform")[0].reset();
 	var h = $('body').html();
-	console.log(h)
 	$.ajax({
 		url: "file.txt",
 		type: "PUT",
@@ -96,5 +153,4 @@ function replyclick(){
 		$(this).parent("div").append($htmlelement);
 	}
 }
-
 
